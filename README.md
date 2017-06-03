@@ -1,6 +1,6 @@
 # debby-express
 
-> Nuxt.js project
+> Debby FrontEnd, built by nuxt/express template with graphql implmented.
 
 ## Build Setup
 
