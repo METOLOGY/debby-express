@@ -54,7 +54,8 @@ export default {
 
       axios.post('/api/line-token', request)
       .then((res) => {
-        console.log(res)
+        vm.$store.commit('SET_PROFILE', res.data)
+        vm.$router.push('/console')
       })
     }
   }
