@@ -20,6 +20,7 @@ module.exports = {
   /*
   ** Add axios globally
   */
+  plugins: ['~plugins/mint'],
   build: {
     vendor: ['axios'],
     /*
