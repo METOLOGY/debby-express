@@ -1,17 +1,12 @@
 <template>
   <section class="container">
-    <img src="../assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
+    <img src="../assets/img/metology-logo.png" alt="Metology Logo" class="logo" />
     <h1 class="title">
-      USERS
+      Metology
     </h1>
-    <ul class="users">
-      <li v-for="(user, index) in users" class="user">
-        <nuxt-link :to="{ name: 'id', params: { id: index }}">
-          {{ user.name }}
-        </nuxt-link>
-      </li>
-    </ul>
-    <a :href="loginURL">line login</a>
+    <a :href="loginURL">
+      <img src="../assets/img/btn_login_base.png" width="150px"/>
+    </a>
   </section>
 </template>
 
