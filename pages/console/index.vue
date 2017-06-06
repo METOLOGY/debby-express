@@ -1,49 +1,33 @@
 <template>
 <div>
-    <mt-header fixed title="固定在顶部"></mt-header>
-    <h3>hello {{ profile.displayName }}</h3>
-    <img :src="`${profile.pictureUrl}/small`" alt="">
+    <mt-header fixed title="血糖故事">
+      <img :src="`${profile.pictureUrl}/small`" alt="" slot="right" height="30px">
+    </mt-header>
+    <div class="mdl-layout mdl-js-layout flow-layout">
+      <main class="mdl-layout__content">
+        <div class="mdl-card mdl-shadow--2dp" v-for="item in alldata">
+          <div class="mdl-card__title">
+            <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
+            <div v-if="item.foodImageUpload">
+              <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
+            </div>
+          </div>
+          <div class="mdl-card__supporting-text" v-if="item.note">
+            {{ item.note }}
+          </div>
+          <div class="mdl-card__actions">
+            {{ item.time | readableTime }}
+          </div>
+        </div>
 
-    <ul>
-      <li v-for="item in records.userCustomusermodelByLineId.bgRecordBgmodelsByUserId.nodes">
-        {{ item.glucoseVal }} 
-        {{ item.type }} 
-        {{ item.time }}
-      </li>
-    </ul>
-
-    <ul>
-      <li v-for="item in records.userCustomusermodelByLineId.foodRecordFoodmodelsByUserId.nodes">
-        {{ item.note }}
-        <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="50%">
-        {{ item.time }}
-      </li>
-    </ul>
-    <mt-tabbar v-model="selected">
-      <mt-tab-item id="外卖">
-        
-        外卖
-      </mt-tab-item>
-      <mt-tab-item id="订单">
-        
-        订单
-      </mt-tab-item>
-      <mt-tab-item id="发现">
-        
-        发现
-      </mt-tab-item>
-      <mt-tab-item id="我的">
-       
-        我的
-      </mt-tab-item>
-    </mt-tabbar>
-
-
+      </main>
+    </div>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
+import _ from 'lodash'
 
 export default {
   async asyncData (context) {
@@ -92,7 +76,45 @@ export default {
   computed: {
     profile () {
       return this.$store.state.profile
+    },
+    alldata () {
+      const bgRecord = this.records.userCustomusermodelByLineId.bgRecordBgmodelsByUserId.nodes
+      const foodRecord = this.records.userCustomusermodelByLineId.foodRecordFoodmodelsByUserId.nodes
+
+      const data = []
+      bgRecord.forEach((item) => {
+        data.push(item)
+      })
+      foodRecord.forEach((item) => {
+        data.push(item)
+      })
+
+      return _.orderBy(data, 'time', 'desc')
+    }
+  },
+  filters: {
+    readableTime (val) {
+      const data = val.split(' ')[0]
+      const time = val.split(' ')[1].split('.')[0]
+      return data + ' ' + time
     }
   }
 }
 </script>
+
+<style scoped>
+.flow-layout {
+  margin-top: 40px;
+  z-index: 0;
+}
+
+.mdl-card {
+  min-height: initial;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.mdl-card__actions {
+  text-align: right;
+}
+</style>
