@@ -1,27 +1,55 @@
 <template>
 <div>
-    <mt-header fixed title="血糖故事">
-      <img :src="`${profile}/small`" alt="" slot="right" height="30px">
-    </mt-header>
-    <div class="mdl-layout mdl-js-layout flow-layout">
-      <main class="mdl-layout__content">
-        <div class="mdl-card mdl-shadow--2dp" v-for="item in alldata">
-          <div class="mdl-card__title">
-            <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
-            <div v-if="item.foodImageUpload">
-              <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
-            </div>
-          </div>
-          <div class="mdl-card__supporting-text" v-if="item.note">
-            {{ item.note }}
-          </div>
-          <div class="mdl-card__actions">
-            {{ item.time | readableTime }}
-          </div>
-        </div>
+  <mt-header fixed title="選單">
+    <img :src="`${profile}/small`" alt="" slot="right" height="30px">
+  </mt-header>
 
-      </main>
+  <div class="spaceing"></div>
+
+  <mt-swipe :show-indicators="true">
+    <mt-swipe-item>
+      <div class="mdl-card summary-card">
+        weekly report
+      </div>
+    </mt-swipe-item>
+  </mt-swipe>
+
+  <div class="flow-layout">
+    <div class="mdl-card" v-for="item in alldata">
+      <div class="mdl-card__title">
+        <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
+        <div v-if="item.foodImageUpload">
+          <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
+        </div>
+      </div>
+      <div class="mdl-card__supporting-text" v-if="item.note">
+        {{ item.note }}
+      </div>
+      <div class="mdl-card__actions">
+        {{ item.time | readableTime }}
+      </div>
     </div>
+  </div>
+
+  <mt-tabbar v-model="selected">
+    <mt-tab-item id="綜合">
+      <img slot="icon" src="~assets/svg/file.svg">
+      綜合
+    </mt-tab-item>
+    <mt-tab-item id="血糖">
+      <img slot="icon" src="~assets/svg/blood-drop.svg">
+      血糖
+    </mt-tab-item>
+    <mt-tab-item id="飲食">
+      <img slot="icon" src="~assets/svg/salad.svg">
+      飲食
+    </mt-tab-item>
+    <mt-tab-item id="藥物">
+      <img slot="icon" src="~assets/svg/pill-capsule.svg">
+      藥物
+    </mt-tab-item>
+  </mt-tabbar>
+
 </div>
 </template>
 
@@ -87,6 +115,11 @@ export default {
       })
     }
   },
+  data () {
+    return {
+      selected: ''
+    }
+  },
   name: 'console',
   computed: {
     profile () {
@@ -110,15 +143,41 @@ export default {
 
 <style lang="sass" scoped>
 .flow-layout
-  margin-top: 40px;
   z-index: 0;
+  height: calc(100vh - 55px - 40px - 250px);
+  overflow: scroll;
+  background-color: rgba(0,0,0,0.1)
+  padding-top: 5px
+  padding-bottom: 5px
 
 .mdl-card
   min-height: initial;
   margin: auto;
-  margin-top: 10px;
+  margin-top: 5px;
   width: 100%;
+  &:first-child
+    margin-top: 0px
+
+.summary-card
+  width: 90%
+  margin: auto
+  height: 100%
 
 .mdl-card__actions
   text-align: right;
+
+
+// mint-setting
+
+.mint-header
+  background-color: #1158a8
+
+.mint-swipe
+  height: 200px
+
+.mint-tabbar
+  z-index: 2
+
+.spaceing
+  height: 40px
 </style>
