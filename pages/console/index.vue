@@ -6,28 +6,35 @@
 
   <div class="spaceing"></div>
 
-  <mt-swipe :show-indicators="true">
-    <mt-swipe-item>
-      <div class="mdl-card summary-card">
-        weekly report
-      </div>
-    </mt-swipe-item>
-  </mt-swipe>
-
   <div class="flow-layout">
+    <mt-swipe :show-indicators="true">
+      <mt-swipe-item>
+        <div class="mdl-card summary-card">
+          <div id="weekly-chart"></div>
+        </div>
+      </mt-swipe-item>
+    </mt-swipe>
+
     <div class="mdl-card" v-for="item in alldata">
       <div class="mdl-card__title">
-        <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
-        <div v-if="item.foodImageUpload">
-          <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
+
+        <div class="media">
+          <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
+          <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
         </div>
+
+        <div class="desc">
+          <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
+          <div v-if="item.note">{{ item.note }}</div>
+          <small>{{ item.time | readableTime }}</small>
+        </div>
+
       </div>
-      <div class="mdl-card__supporting-text" v-if="item.note">
-        {{ item.note }}
+
+      <div v-if="item.foodImageUpload" class="flow-image">
+        <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
       </div>
-      <div class="mdl-card__actions">
-        {{ item.time | readableTime }}
-      </div>
+
     </div>
   </div>
 
@@ -56,6 +63,9 @@
 <script>
 import axios from 'axios'
 import _ from 'lodash'
+import c3 from 'c3'
+
+// require('d3')
 
 export default {
   created () {
@@ -104,16 +114,30 @@ export default {
 
         const totalData = []
         bgRecord.forEach((item) => {
-          totalData.push(item)
+          let itemNew = item
+          itemNew.dataType = 'bg'
+          totalData.push(itemNew)
         })
 
         FoodRecord.forEach((item) => {
-          totalData.push(item)
+          let itemNew = item
+          itemNew.dataType = 'food'
+          totalData.push(itemNew)
         })
 
         this.$store.commit('SET_TOTAL_DATA', _.orderBy(totalData, 'time', 'desc'))
       })
     }
+  },
+  mounted () {
+    c3.generate({
+      bindto: '#weekly-chart',
+      data: {
+        columns: [
+          ['data1', 30, 200, 100, 400, 150, 250]
+        ]
+      }
+    })
   },
   data () {
     return {
@@ -133,9 +157,9 @@ export default {
   },
   filters: {
     readableTime (val) {
-      const data = val.split(' ')[0]
+      const date = val.split(' ')[0]
       const time = val.split(' ')[1].split('.')[0]
-      return data + ' ' + time
+      return date + ' ' + time
     }
   }
 }
@@ -144,7 +168,7 @@ export default {
 <style lang="sass" scoped>
 .flow-layout
   z-index: 0;
-  height: calc(100vh - 55px - 40px - 250px);
+  height: calc(100vh - 55px - 40px);
   overflow: scroll;
   background-color: rgba(0,0,0,0.1)
   padding-top: 5px
@@ -159,16 +183,22 @@ export default {
     margin-top: 0px
 
 .summary-card
-  width: 90%
+  width: calc(100% - 10px)
   margin: auto
   height: 100%
 
 .mdl-card__actions
   text-align: right;
 
+.media
+  width: 50px
+  .media-icon
+    height: 35px
+
+.flow-image
+  width: 100%
 
 // mint-setting
-
 .mint-header
   background-color: #1158a8
 
