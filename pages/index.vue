@@ -49,7 +49,14 @@ export default {
 
       axios.post('/api/line-token', request)
       .then((res) => {
-        vm.$store.commit('SET_PROFILE', res.data)
+        const data = res.data
+        const keys = Object.keys(data)
+
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          localStorage.setItem(key, data[key])
+        }
+
         vm.$router.push('/console')
       })
     }
