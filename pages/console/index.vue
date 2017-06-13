@@ -36,22 +36,25 @@
       </div>
 
     </div>
+    <div v-if="alldata.length === 0" class="empty">
+      <img src="~assets/svg/debby-no-record.svg" id="debby">
+    </div>
   </div>
 
   <mt-tabbar v-model="selected">
-    <mt-tab-item id="綜合">
+    <mt-tab-item id="all">
       <img slot="icon" src="~assets/svg/file.svg">
       綜合
     </mt-tab-item>
-    <mt-tab-item id="血糖">
+    <mt-tab-item id="bg">
       <img slot="icon" src="~assets/svg/blood-drop.svg">
       血糖
     </mt-tab-item>
-    <mt-tab-item id="飲食">
+    <mt-tab-item id="food">
       <img slot="icon" src="~assets/svg/salad.svg">
       飲食
     </mt-tab-item>
-    <mt-tab-item id="藥物">
+    <mt-tab-item id="drug_insulin">
       <img slot="icon" src="~assets/svg/pill-capsule.svg">
       藥物
     </mt-tab-item>
@@ -61,90 +64,61 @@
 </template>
 
 <script>
-import axios from 'axios'
 import _ from 'lodash'
 import c3 from 'c3'
 
-// require('d3')
+require('d3')
 
 export default {
+  name: 'console',
   created () {
-    if (process.BROWSER_BUILD) {
-      const userId = window.localStorage.getItem('userId')
-
-      const qlScript = `
-        {
-          userCustomusermodelByLineId(lineId:"${userId}") {
-            bgRecordBgmodelsByUserId(orderBy:TIME_DESC){
-              nodes {
-                time,
-                glucoseVal,
-                type
-              }
-            },
-            foodRecordFoodmodelsByUserId(orderBy: TIME_DESC) {
-              nodes {
-                time,
-                note,
-                foodImageUpload
-              }
-            },
-            bgRecordDrugintakemodelsByUserId(orderBy: TIME_DESC) {
-              nodes {
-                time,
-                status
-              }
-            },
-            bgRecordInsulinintakemodelsByUserId(orderBy: TIME_ASC) {
-              nodes {
-                time,
-                status
-              }
-            }
-          }
-        }`
-
-      axios.post('/graphql', {
-        query: qlScript
-      })
-      .then((res) => {
-        const data = res.data
-        const bgRecord = data.data.userCustomusermodelByLineId.bgRecordBgmodelsByUserId.nodes
-        const FoodRecord = data.data.userCustomusermodelByLineId.foodRecordFoodmodelsByUserId.nodes
-
-        const totalData = []
-        bgRecord.forEach((item) => {
-          let itemNew = item
-          itemNew.dataType = 'bg'
-          totalData.push(itemNew)
-        })
-
-        FoodRecord.forEach((item) => {
-          let itemNew = item
-          itemNew.dataType = 'food'
-          totalData.push(itemNew)
-        })
-
-        this.$store.commit('SET_TOTAL_DATA', _.orderBy(totalData, 'time', 'desc'))
-      })
-    }
+    this.$store.commit('GET_TOTAL_DATA')
   },
   mounted () {
-    c3.generate({
-      bindto: '#weekly-chart',
-      data: {
-        columns: [
-          ['data1', 30, 200, 100, 400, 150, 250]
-        ]
-      }
-    })
+    if (process.BROWSER_BUILD) {
+      const time = ['x']
+      const value = ['glucoseVal']
+      this.$store.state.totalData.BgRecord.forEach((item) => {
+        time.push(new Date(item.time))
+        value.push(item.glucoseVal)
+      })
+
+      console.log(time)
+      console.log(value)
+      c3.generate({
+        size: {
+          height: 200
+        },
+        legend: {
+          show: true
+        },
+        tooltip: {
+          show: true
+        },
+        bindto: '#weekly-chart',
+        data: {
+          x: 'x',
+          columns: [
+            time,
+            value
+          ]
+        },
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: '%m-%d'
+            }
+          }
+        }
+      })
+    }
   },
   data () {
     return {
-      selected: ''
+      selected: 'all'
     }
   },
-  name: 'console',
   computed: {
     profile () {
       if (process.BROWSER_BUILD) {
@@ -152,7 +126,30 @@ export default {
       }
     },
     alldata () {
-      return this.$store.state.totalData
+      switch (this.selected) {
+        case 'all':
+          const all = []
+          for (let key in this.$store.state.totalData) {
+            const item = this.$store.state.totalData[key]
+            item.forEach((val) => {
+              all.push(val)
+            })
+          }
+          return _.orderBy(all, 'time', 'desc')
+        case 'bg':
+          return _.orderBy(this.$store.state.totalData.BgRecord, '-time')
+        case 'food':
+          return _.orderBy(this.$store.state.totalData.FoodRecord, '-time')
+        case 'drug_insulin':
+          const drugInsulin = []
+          this.$store.state.totalData.DrugRecord.forEach((val) => {
+            drugInsulin.push(val)
+          })
+          this.$store.state.totalData.InsulinRecord.forEach((val) => {
+            drugInsulin.push(val)
+          })
+          return _.orderBy(drugInsulin, '-time')
+      }
     }
   },
   filters: {
@@ -210,4 +207,13 @@ export default {
 
 .spaceing
   height: 40px
+
+.empty
+  position: relative
+  height: calc(100% - 200px);
+  #debby
+    position: absolute
+    bottom: 0px
+    width: 98%
+    left: 1%
 </style>
