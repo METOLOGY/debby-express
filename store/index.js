@@ -7,12 +7,22 @@ Vue.use(Vuex)
 const state = {
   profile: {},
   isLogined: '',
-  totalData: {}
+  totalData: {},
+  news: []
 }
 
 const mutations = {
   SET_PROFILE (state, response) { // depreciated
     state.profile = response
+  },
+  GET_RELATED_NEWS (state, question) {
+    const api = 'https://obscure-beach-33269.herokuapp.com/api/v1/ask/'
+
+    axios.post(api, { question: question })
+    .then((res) => {
+      state.news = res.data
+    })
+
   },
   GET_TOTAL_DATA (state) {
     if (process.BROWSER_BUILD) {

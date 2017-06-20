@@ -10,7 +10,32 @@
     <mt-swipe :show-indicators="true">
       <mt-swipe-item>
         <div class="mdl-card summary-card">
-          <div id="weekly-chart"></div>
+          <!-- <div id="weekly-chart"></div> -->
+          <img src="~assets/img/test/plot.png" width="100%">
+        </div>
+      </mt-swipe-item>
+    </mt-swipe>
+
+    <mt-swipe :show-indicators="true">
+      <mt-swipe-item>
+        <div class="mdl-card summary-card">
+          <div id="weekly-chart">
+            <img src="~assets/img/test/001.jpg" width="100%">
+          </div>
+        </div>
+      </mt-swipe-item>
+      <mt-swipe-item>
+        <div class="mdl-card summary-card">
+          <div id="weekly-chart">
+            <img src="~assets/img/test/002.jpg" width="100%">
+          </div>
+        </div>
+      </mt-swipe-item>
+      <mt-swipe-item>
+        <div class="mdl-card summary-card">
+          <div id="weekly-chart">
+            <img src="~assets/img/test/003.jpg" width="100%">
+          </div>
         </div>
       </mt-swipe-item>
     </mt-swipe>
@@ -65,54 +90,56 @@
 
 <script>
 import _ from 'lodash'
-import c3 from 'c3'
+// import c3 from 'c3'
+import FastClick from 'fastclick'
 
-require('d3')
+// require('d3')
 
 export default {
   name: 'console',
   created () {
     this.$store.commit('GET_TOTAL_DATA')
+    FastClick.attach(document.body)
   },
   mounted () {
-    if (process.BROWSER_BUILD) {
-      const time = ['x']
-      const value = ['glucoseVal']
-      this.$store.state.totalData.BgRecord.forEach((item) => {
-        time.push(new Date(item.time))
-        value.push(item.glucoseVal)
-      })
+    // if (process.BROWSER_BUILD) {
+    //   const time = ['x']
+    //   const value = ['glucoseVal']
+    //   this.$store.state.totalData.BgRecord.forEach((item) => {
+    //     time.push(new Date(item.time))
+    //     value.push(item.glucoseVal)
+    //   })
 
-      console.log(time)
-      console.log(value)
-      c3.generate({
-        size: {
-          height: 200
-        },
-        legend: {
-          show: true
-        },
-        tooltip: {
-          show: true
-        },
-        bindto: '#weekly-chart',
-        data: {
-          x: 'x',
-          columns: [
-            time,
-            value
-          ]
-        },
-        axis: {
-          x: {
-            type: 'timeseries',
-            tick: {
-              format: '%m-%d'
-            }
-          }
-        }
-      })
-    }
+    //   console.log(time)
+    //   console.log(value)
+    //   c3.generate({
+    //     size: {
+    //       height: 200
+    //     },
+    //     legend: {
+    //       show: true
+    //     },
+    //     tooltip: {
+    //       show: true
+    //     },
+    //     bindto: '#weekly-chart',
+    //     data: {
+    //       x: 'x',
+    //       columns: [
+    //         time,
+    //         value
+    //       ]
+    //     },
+    //     axis: {
+    //       x: {
+    //         type: 'timeseries',
+    //         tick: {
+    //           format: '%m-%d'
+    //         }
+    //       }
+    //     }
+    //   })
+    // }
   },
   data () {
     return {

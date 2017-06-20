@@ -16,7 +16,7 @@ import axios from '~plugins/axios'
 let lineLoginBaseUrl = 'https://access.line.me/dialog/oauth/weblogin?'
 lineLoginBaseUrl += 'response_type=code'
 lineLoginBaseUrl += '&client_id=1505688700'
-lineLoginBaseUrl += '&redirect_uri=http://localhost:3000'
+lineLoginBaseUrl += '&redirect_uri=http://2e8b4f03.ngrok.io'
 lineLoginBaseUrl += '&state=metology'
 
 export default {
@@ -43,7 +43,7 @@ export default {
         client_id: '1505688700',
         client_secret: '93e503e803bf6889cf1ba3c564e81fa0',
         code: vm.$route.query.code,
-        redirect_uri: 'http://localhost:3000',
+        redirect_uri: 'http://2e8b4f03.ngrok.io',
         grant_type: 'authorization_code'
       }
 
