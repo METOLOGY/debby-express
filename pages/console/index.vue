@@ -10,28 +10,41 @@
     <mt-swipe :show-indicators="false" :auto="0">
       <mt-swipe-item v-for="dayData in alldata">
         <div class="mdl-card" v-for="item in dayData">
-          <div class="mdl-card__title">
-
-            <div class="media">
-              <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
-              <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
-            </div>
-
-            <div class="desc">
-              <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
-              <div v-if="item.note">{{ item.note }}</div>
-              <small>{{ item.time | readableTime }}</small>
-            </div>
-
-          </div>
-
           <div v-if="item.foodImageUpload" class="flow-image">
             <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
           </div>
 
+
+          <div class="mdl-card__supporting-text bg-supporting-text" v-if="item.dataType === 'bg'">
+              <div class="supporting-text-wrap">
+                <h5 v-if="item.dataType === 'bg'">{{ item.type === 'before' ? "餐前" : "飯後"  }}</h5>
+                <h1 v-if="item.type">
+                  {{ item.glucoseVal }}
+                  <span id="bg-unit"><small>mg/dL</small></span>
+                </h1>
+              </div>
+          </div>
+
+          <div class="mdl-card__supporting-text" v-else>
+            <div v-if="item.note">{{ item.note }}</div>
+          </div>
+
+
           <div v-if="alldata.length === 0" class="empty">
             <img src="~assets/svg/debby-no-record.svg" id="debby">
           </div>
+
+          <div class="mdl-card__actions">
+            <small>{{ item.time | readableTime }}</small>
+          </div>
+          
+          <div class="mdl-card__menu">
+            <div class="media">
+              <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
+              <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
+            </div>
+          </div>
+
         </div>
       </mt-swipe-item>
     </mt-swipe>
@@ -152,8 +165,9 @@ export default {
   },
   filters: {
     readableTime (val) {
-      const date = val.split(' ')[0]
-      const time = val.split(' ')[1].split('.')[0]
+      const datetime = new Date(val)
+      const date = datetime.getFullYear() + '/' + datetime.getMonth() + '/' + datetime.getDate()
+      const time = datetime.getHours() + ':' + datetime.getMinutes()
       return date + ' ' + time
     }
   }
@@ -161,6 +175,19 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+
+// original
+
+h1
+  font-size: 150px
+  margin: 0px
+  text-align: center
+  line-height: 1.0
+
+h5
+  margin: 0px
+
+// custom
 .flow-layout
   z-index: 0;
   height: calc(100vh - 55px - 40px);
@@ -169,36 +196,43 @@ export default {
   padding-top: 5px
   padding-bottom: 5px
 
-.mdl-card
-  min-height: initial;
-  margin: auto;
-  margin-top: 5px;
-  width: 100%;
-  &:first-child
-    margin-top: 0px
-
 .summary-card
   width: calc(100% - 10px)
   margin: auto
   height: 100%
 
-.mdl-card__actions
-  text-align: right;
-
 .media
-  width: 50px
+  width: 50px;
+  height: 50px;
+  display: flex;
+  //border: 2px solid black;
+  border-radius: 50%;
+  background: white;
   .media-icon
+    margin: auto
     height: 35px
 
 .flow-image
   width: 100%
 
+.bg-supporting-text
+  min-height: calc(100vw - 34px)
+  display: flex
+  .supporting-text-wrap
+    margin: auto
+
+#bg-unit
+  font-size: 0.3em
+
 // mint-setting
 .mint-header
   background-color: #1158a8
 
+.mint-swipe-items-wrap
+  overflow: scroll
+
 .mint-swipe
-  height: 200px
+  // height: 200px
 
 .mint-tabbar
   z-index: 2
@@ -214,4 +248,23 @@ export default {
     bottom: 0px
     width: 98%
     left: 1%
+
+// mdl format
+.mdl-card__actions
+  text-align: center
+  background-color: #65bdbc
+  color: white
+
+.mdl-card
+  min-height: initial;
+  margin: auto;
+  margin-top: 5px;
+  width: 98%;
+  &:first-child
+    margin-top: 0px
+
+.mdl-card__supporting-text
+  width: 100%
+  padding: 0px
+
 </style>
