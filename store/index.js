@@ -7,7 +7,8 @@ Vue.use(Vuex)
 const state = {
   profile: {},
   isLogined: '',
-  totalData: {},
+  totalData: [],
+  DataByDate: {},
   news: []
 }
 
@@ -22,7 +23,6 @@ const mutations = {
     .then((res) => {
       state.news = res.data
     })
-
   },
   GET_TOTAL_DATA (state) {
     if (process.BROWSER_BUILD) {
@@ -70,22 +70,39 @@ const mutations = {
         const DrugRecord = data.data.userCustomusermodelByLineId.bgRecordDrugintakemodelsByUserId.nodes
         const InsulinRecord = data.data.userCustomusermodelByLineId.bgRecordInsulinintakemodelsByUserId.nodes
 
+        const allData = []
+        const allDataByDate = {}
+
         BgRecord.forEach((val) => {
           val.dataType = 'bg'
+          allData.push(val)
         })
 
         FoodRecord.forEach((val) => {
           val.dataType = 'food'
+          allData.push(val)
         })
 
         DrugRecord.forEach((val) => {
           val.dataType = 'drug'
+          allData.push(val)
         })
 
         InsulinRecord.forEach((val) => {
           val.dataType = 'insulin'
+          allData.push(val)
         })
 
+        allData.forEach((val) => {
+          const time = new Date(val.time) // transfer to datetime type
+          time.setHours(0, 0, 0, 0) // set time to 0, keep date only
+          if (!(time in allDataByDate)) {
+            allDataByDate[time] = []
+          }
+          allDataByDate[time].push(val)
+        })
+
+        state.DataByDate = allDataByDate
         state.totalData = {
           BgRecord: BgRecord,
           FoodRecord: FoodRecord,
