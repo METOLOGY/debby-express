@@ -7,91 +7,61 @@
   <div class="spaceing"></div>
 
   <div class="flow-layout">
-    <mt-swipe :show-indicators="true">
-      <mt-swipe-item>
-        <div class="mdl-card summary-card">
-          <!-- <div id="weekly-chart"></div> -->
-          <img src="~assets/img/test/plot.png" width="100%">
-        </div>
-      </mt-swipe-item>
-    </mt-swipe>
+    <mt-swipe :show-indicators="false" :auto="0">
+      <mt-swipe-item v-for="dayData in alldata">
+        <div class="mdl-card" v-for="item in dayData">
+          <div class="mdl-card__title">
 
-    <mt-swipe :show-indicators="true">
-      <mt-swipe-item>
-        <div class="mdl-card summary-card">
-          <div id="weekly-chart">
-            <img src="~assets/img/test/001.jpg" width="100%">
+            <div class="media">
+              <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
+              <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
+            </div>
+
+            <div class="desc">
+              <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
+              <div v-if="item.note">{{ item.note }}</div>
+              <small>{{ item.time | readableTime }}</small>
+            </div>
+
           </div>
-        </div>
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <div class="mdl-card summary-card">
-          <div id="weekly-chart">
-            <img src="~assets/img/test/002.jpg" width="100%">
+
+          <div v-if="item.foodImageUpload" class="flow-image">
+            <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
           </div>
-        </div>
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <div class="mdl-card summary-card">
-          <div id="weekly-chart">
-            <img src="~assets/img/test/003.jpg" width="100%">
+
+          <div v-if="alldata.length === 0" class="empty">
+            <img src="~assets/svg/debby-no-record.svg" id="debby">
           </div>
         </div>
       </mt-swipe-item>
     </mt-swipe>
 
-    <div class="mdl-card" v-for="item in alldata">
-      <div class="mdl-card__title">
-
-        <div class="media">
-          <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
-          <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
-        </div>
-
-        <div class="desc">
-          <div v-if="item.type">{{ item.type === 'before' ? "餐前" : "飯後"  }}血糖:  {{ item.glucoseVal }} </div>
-          <div v-if="item.note">{{ item.note }}</div>
-          <small>{{ item.time | readableTime }}</small>
-        </div>
-
-      </div>
-
-      <div v-if="item.foodImageUpload" class="flow-image">
-        <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
-      </div>
-
-    </div>
-    <div v-if="alldata.length === 0" class="empty">
-      <img src="~assets/svg/debby-no-record.svg" id="debby">
-    </div>
+    <mt-tabbar>
+      <mt-tab-item id="all">
+        <img slot="icon" src="~assets/svg/file.svg">
+        血糖故事
+      </mt-tab-item>
+      <mt-tab-item id="bg">
+        <img slot="icon" src="~assets/svg/blood-drop.svg">
+        推薦文章
+      </mt-tab-item>
+    <!--     <mt-tab-item id="food">
+        <img slot="icon" src="~assets/svg/salad.svg">
+        飲食分享
+      </mt-tab-item> -->
+      <mt-tab-item id="drug_insulin">
+        <img slot="icon" src="~assets/svg/pill-capsule.svg">
+        商城選購
+      </mt-tab-item>
+    </mt-tabbar>
   </div>
-
-  <mt-tabbar v-model="selected">
-    <mt-tab-item id="all">
-      <img slot="icon" src="~assets/svg/file.svg">
-      綜合
-    </mt-tab-item>
-    <mt-tab-item id="bg">
-      <img slot="icon" src="~assets/svg/blood-drop.svg">
-      血糖
-    </mt-tab-item>
-    <mt-tab-item id="food">
-      <img slot="icon" src="~assets/svg/salad.svg">
-      飲食
-    </mt-tab-item>
-    <mt-tab-item id="drug_insulin">
-      <img slot="icon" src="~assets/svg/pill-capsule.svg">
-      藥物
-    </mt-tab-item>
-  </mt-tabbar>
-
 </div>
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 // import c3 from 'c3'
-import FastClick from 'fastclick'
+// import FastClick from 'fastclick'
 
 // require('d3')
 
@@ -99,7 +69,7 @@ export default {
   name: 'console',
   created () {
     this.$store.commit('GET_TOTAL_DATA')
-    FastClick.attach(document.body)
+    // FastClick.attach(document.body)
   },
   mounted () {
     // if (process.BROWSER_BUILD) {
@@ -153,30 +123,31 @@ export default {
       }
     },
     alldata () {
-      switch (this.selected) {
-        case 'all':
-          const all = []
-          for (let key in this.$store.state.totalData) {
-            const item = this.$store.state.totalData[key]
-            item.forEach((val) => {
-              all.push(val)
-            })
-          }
-          return _.orderBy(all, 'time', 'desc')
-        case 'bg':
-          return _.orderBy(this.$store.state.totalData.BgRecord, '-time')
-        case 'food':
-          return _.orderBy(this.$store.state.totalData.FoodRecord, '-time')
-        case 'drug_insulin':
-          const drugInsulin = []
-          this.$store.state.totalData.DrugRecord.forEach((val) => {
-            drugInsulin.push(val)
-          })
-          this.$store.state.totalData.InsulinRecord.forEach((val) => {
-            drugInsulin.push(val)
-          })
-          return _.orderBy(drugInsulin, '-time')
-      }
+      return this.$store.state.DataByDate
+      // switch (this.selected) {
+      //   case 'all':
+      //     const all = []
+      //     for (let key in this.$store.state.totalData) {
+      //       const item = this.$store.state.totalData[key]
+      //       item.forEach((val) => {
+      //         all.push(val)
+      //       })
+      //     }
+      //     return _.orderBy(all, 'time', 'desc')
+      //   case 'bg':
+      //     return _.orderBy(this.$store.state.totalData.BgRecord, '-time')
+      //   case 'food':
+      //     return _.orderBy(this.$store.state.totalData.FoodRecord, '-time')
+      //   case 'drug_insulin':
+      //     const drugInsulin = []
+      //     this.$store.state.totalData.DrugRecord.forEach((val) => {
+      //       drugInsulin.push(val)
+      //     })
+      //     this.$store.state.totalData.InsulinRecord.forEach((val) => {
+      //       drugInsulin.push(val)
+      //     })
+      //     return _.orderBy(drugInsulin, '-time')
+      // }
     }
   },
   filters: {
