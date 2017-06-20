@@ -17,13 +17,13 @@ export default {
   name: 'News',
   data () {
     return {
-      question: '糖尿病',
+      question: '糖尿病'
     }
   },
   created () {
     this.$store.commit('GET_RELATED_NEWS', this.question)
   },
-  computed {
+  computed: {
     news () {
       return this.$store.state.news
     }
