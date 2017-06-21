@@ -102,6 +102,29 @@ const mutations = {
           allDataByDate[time].push(val)
         })
 
+        console.log(allDataByDate)
+
+        for (const key in allDataByDate) {
+          console.log(key)
+          const dataByDate = allDataByDate[key]
+          dataByDate.forEach((record) => {
+            if (record.dataType === 'food') {
+              const recordTime = new Date(record.time)
+              const before2hour = recordTime.setHours(recordTime.getHours() - 2)
+              const after2hour = recordTime.setHours(recordTime.getHours() + 2)
+
+              for (let i = 0; i < dataByDate.length; i++) {
+                const otherRecord = dataByDate[i]
+                const otherRecordTime = new Date(dataByDate[i].time)
+                if (otherRecord.dataType === 'bg' && otherRecordTime.getTime() < after2hour && otherRecordTime.getTime() > before2hour) {
+                  if(!('similar_record' in record)) record['similar_record'] = []
+                  record['similar_record'].push(otherRecord)
+                }
+              }
+             }
+          })
+        }
+
         state.DataByDate = allDataByDate
         state.totalData = {
           BgRecord: BgRecord,
