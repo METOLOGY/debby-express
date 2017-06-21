@@ -8,7 +8,11 @@
 
   <div class="flow-layout">
     <mt-swipe :show-indicators="false" :auto="0">
-      <mt-swipe-item v-for="dayData in alldata">
+      <mt-swipe-item v-for="(dayData, datetime) in alldata">
+        <div class="datetime-bar">
+          {{ datetime | readableDate }}
+        </div>
+
         <div class="mdl-card" v-for="item in dayData">
           <div v-if="item.foodImageUpload" class="flow-image">
             <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
@@ -51,11 +55,11 @@
 
     <mt-tabbar>
       <mt-tab-item id="all">
-        <img slot="icon" src="~assets/svg/file.svg">
+        <img slot="icon" src="~assets/svg/blood-drop.svg">
         血糖故事
       </mt-tab-item>
       <mt-tab-item id="bg">
-        <img slot="icon" src="~assets/svg/blood-drop.svg">
+        <img slot="icon" src="~assets/svg/file.svg">
         推薦文章
       </mt-tab-item>
     <!--     <mt-tab-item id="food">
@@ -169,6 +173,11 @@ export default {
       const date = datetime.getFullYear() + '/' + datetime.getMonth() + '/' + datetime.getDate()
       const time = datetime.getHours() + ':' + datetime.getMinutes()
       return date + ' ' + time
+    },
+    readableDate (val) {
+      const datetime = new Date(val)
+      const date = datetime.getFullYear() + ' / ' + datetime.getMonth() + ' / ' + datetime.getDate()
+      return date
     }
   }
 }
@@ -193,7 +202,6 @@ h5
   height: calc(100vh - 55px - 40px);
   overflow: scroll;
   background-color: rgba(0,0,0,0.1)
-  padding-top: 5px
   padding-bottom: 5px
 
 .summary-card
@@ -224,12 +232,19 @@ h5
 #bg-unit
   font-size: 0.3em
 
+.datetime-bar
+  background: white;
+  padding: 10px;
+  font-size: 24px;
+  line-height: 1;
+  text-align: center;
+
 // mint-setting
 .mint-header
   background-color: #1158a8
 
-.mint-swipe-items-wrap
-  overflow: scroll
+.mint-swipe-item
+  overflow: auto
 
 .mint-swipe
   // height: 200px
