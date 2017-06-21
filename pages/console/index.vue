@@ -1,6 +1,6 @@
 <template>
 <div>
-  <mt-header fixed title="選單">
+  <mt-header fixed title="血糖故事">
     <img :src="`${profile}/small`" alt="" slot="right" height="30px">
   </mt-header>
 
@@ -13,42 +13,46 @@
           {{ datetime | readableDate }}
         </div>
 
-        <div class="mdl-card" v-for="item in dayData">
-          <div v-if="item.foodImageUpload" class="flow-image">
-            <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
-          </div>
-
-
-          <div class="mdl-card__supporting-text bg-supporting-text" v-if="item.dataType === 'bg'">
-              <div class="supporting-text-wrap">
-                <h5 v-if="item.dataType === 'bg'">{{ item.type === 'before' ? "餐前" : "飯後"  }}</h5>
-                <h1 v-if="item.type">
-                  {{ item.glucoseVal }}
-                  <span id="bg-unit"><small>mg/dL</small></span>
-                </h1>
-              </div>
-          </div>
-
-          <div class="mdl-card__supporting-text" v-else>
-            <div v-if="item.note">{{ item.note }}</div>
-          </div>
-
-
-          <div v-if="alldata.length === 0" class="empty">
-            <img src="~assets/svg/debby-no-record.svg" id="debby">
-          </div>
-
-          <div class="mdl-card__actions">
-            <small>{{ item.time | readableTime }}</small>
-          </div>
-          
-          <div class="mdl-card__menu">
-            <div class="media">
-              <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
-              <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
+        <div class="card-wrap">
+          <div class="mdl-card" v-for="item in dayData">
+            <div v-if="item.dataType === 'food'" class="flow-image">
+              <img :src="`https://debby.metology.com.tw/media/${item.foodImageUpload}`" alt="food_image" width="100%">
+              <div class="food-image--mask"></div>
+              <h3 v-if="item.similar_record" class="food-image--text">{{ item.similar_record[0].glucoseVal }}<small>mg/dL</small> {{ item.type === 'before' ? "餐前" : "飯後"  }}</h3>
             </div>
-          </div>
 
+
+            <div class="mdl-card__supporting-text bg-supporting-text" v-if="item.dataType === 'bg'">
+                <div class="supporting-text-wrap">
+                  <h5 v-if="item.dataType === 'bg'">{{ item.type === 'before' ? "餐前" : "飯後"  }}</h5>
+                  <h1 v-if="item.type">
+                    {{ item.glucoseVal }}
+                    <span id="bg-unit"><small>mg/dL</small></span>
+                  </h1>
+                </div>
+            </div>
+
+            <div class="mdl-card__supporting-text food-supporting-text" v-else>
+              <div v-if="item.note"><h5>{{ item.note }}</h5></div>
+            </div>
+
+
+            <div v-if="alldata.length === 0" class="empty">
+              <img src="~assets/svg/debby-no-record.svg" id="debby">
+            </div>
+
+            <div class="mdl-card__actions">
+              <small>{{ item.time | readableTime }}</small>
+            </div>
+
+            <div class="mdl-card__menu">
+              <div class="media">
+                <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
+                <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
+              </div>
+            </div>
+
+          </div>
         </div>
       </mt-swipe-item>
     </mt-swipe>
@@ -170,13 +174,13 @@ export default {
   filters: {
     readableTime (val) {
       const datetime = new Date(val)
-      const date = datetime.getFullYear() + '/' + datetime.getMonth() + '/' + datetime.getDate()
+      // const date = datetime.getFullYear() + '/' + datetime.getMonth() + '/' + datetime.getDate()
       const time = datetime.getHours() + ':' + datetime.getMinutes()
-      return date + ' ' + time
+      return time
     },
     readableDate (val) {
       const datetime = new Date(val)
-      const date = datetime.getFullYear() + ' / ' + datetime.getMonth() + ' / ' + datetime.getDate()
+      const date = datetime.getFullYear() + ' - ' + datetime.getMonth() + ' - ' + datetime.getDate()
       return date
     }
   }
@@ -184,6 +188,25 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+
+// mdl format
+.mdl-card__actions
+  text-align: center
+  background-color: #65bdbc
+  color: white
+
+.mdl-card
+  min-height: initial;
+  margin: auto;
+  margin-top: 5px;
+  width: 98%;
+  &:first-child
+    margin-top: 0px
+
+.mdl-card__supporting-text
+  width: 100%
+  padding: 0px
+
 
 // original
 
@@ -222,6 +245,22 @@ h5
 
 .flow-image
   width: 100%
+  position: relative
+  img
+
+  .food-image--mask
+    position: absolute
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 80%,rgba(81,81,81,1) 100%);
+    top: 0px;
+    height: 100%;
+    width: 100%;
+  .food-image--text
+    position: absolute
+    bottom: 0px
+    left: 5%;
+    margin: 16px 0px;
+    color: white;
+    font-weight: 100;
 
 .bg-supporting-text
   min-height: calc(100vw - 34px)
@@ -229,22 +268,28 @@ h5
   .supporting-text-wrap
     margin: auto
 
+.food-supporting-text
+  padding: 5%
+
 #bg-unit
   font-size: 0.3em
 
 .datetime-bar
   background: white;
   padding: 10px;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1;
   text-align: center;
+
+.card-wrap
+  height: calc(100% - 44px)
+  overflow: auto
+  padding-top: 1%
+
 
 // mint-setting
 .mint-header
   background-color: #1158a8
-
-.mint-swipe-item
-  overflow: auto
 
 .mint-swipe
   // height: 200px
@@ -264,22 +309,5 @@ h5
     width: 98%
     left: 1%
 
-// mdl format
-.mdl-card__actions
-  text-align: center
-  background-color: #65bdbc
-  color: white
-
-.mdl-card
-  min-height: initial;
-  margin: auto;
-  margin-top: 5px;
-  width: 98%;
-  &:first-child
-    margin-top: 0px
-
-.mdl-card__supporting-text
-  width: 100%
-  padding: 0px
 
 </style>
