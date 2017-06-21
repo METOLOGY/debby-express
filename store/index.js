@@ -102,10 +102,8 @@ const mutations = {
           allDataByDate[time].push(val)
         })
 
-        console.log(allDataByDate)
-
+        // stack other records to the food record. (before or after two hour.)
         for (const key in allDataByDate) {
-          console.log(key)
           const dataByDate = allDataByDate[key]
           dataByDate.forEach((record) => {
             if (record.dataType === 'food') {
@@ -117,11 +115,12 @@ const mutations = {
                 const otherRecord = dataByDate[i]
                 const otherRecordTime = new Date(dataByDate[i].time)
                 if (otherRecord.dataType === 'bg' && otherRecordTime.getTime() < after2hour && otherRecordTime.getTime() > before2hour) {
-                  if(!('similar_record' in record)) record['similar_record'] = []
-                  record['similar_record'].push(otherRecord)
+                  if (!('similar_record' in record)) record['similar_record'] = []
+                  record['similar_record'].push(otherRecord) // append the record to the food record.
+                  dataByDate.splice(i, 1) // remove the records.
                 }
               }
-             }
+            }
           })
         }
 
