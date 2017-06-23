@@ -35,7 +35,7 @@
             </div>
 
             <div class="mdl-card__actions">
-              <small>{{ item.time | readableTime }}</small>
+              {{ item.time | readableTime }}
             </div>
 
             <div class="mdl-card__menu">
@@ -100,9 +100,6 @@ export default {
   &:first-child
     margin-top: 0px
 
-.mdl-card__supporting-text
-  width: 100%
-  padding: 0px
 
 
 // original
@@ -144,7 +141,6 @@ h5
   width: 100%
   position: relative
   img
-
   .food-image--mask
     position: absolute
     background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,0.2) 80%,rgba(81,81,81,1) 100%);
