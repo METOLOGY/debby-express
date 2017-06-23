@@ -3,7 +3,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'starter',
+    title: 'Debby - 血糖故事',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -22,6 +22,10 @@ module.exports = {
   /*
   ** Add axios globally
   */
+  loading: {
+    color: '#1158a8',
+    height: '5px'
+  },
   plugins: ['~plugins/mint'],
   build: {
     vendor: ['axios'],
