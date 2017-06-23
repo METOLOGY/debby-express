@@ -17,11 +17,12 @@ const mutations = {
     state.profile = response
   },
   GET_RELATED_NEWS (state, question) {
-    const api = 'https://obscure-beach-33269.herokuapp.com/api/v1/ask/'
+    const url = '/api/get-articles'
 
-    axios.post(api, { question: question })
+    axios.get(`${url}/${question}`)
     .then((res) => {
       state.news = res.data
+      console.log(state.news)
     })
   },
   GET_TOTAL_DATA (state) {
