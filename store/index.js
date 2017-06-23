@@ -22,7 +22,6 @@ const mutations = {
     axios.get(`${url}/${question}`)
     .then((res) => {
       state.news = res.data
-      console.log(state.news)
     })
   },
   GET_TOTAL_DATA (state) {
