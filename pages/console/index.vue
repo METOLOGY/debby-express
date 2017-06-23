@@ -66,8 +66,7 @@ export default {
   },
   data () {
     return {
-      selected: '',
-      active: ''
+      selected: 'bgstory'
     }
   },
   computed: {
@@ -90,4 +89,8 @@ export default {
 .tab-icon
   width: 24px
   height: 24px
+
+// mint-setting
+.mint-header
+  background-color: #1158a8
 </style>
