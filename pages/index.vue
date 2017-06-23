@@ -1,12 +1,20 @@
 <template>
   <section class="container">
-    <img src="../assets/img/metology-logo.png" alt="Metology Logo" class="logo" />
-    <h1 class="title">
-      Metology
-    </h1>
-    <a :href="loginURL">
-      <img src="../assets/img/btn_login_base.png" width="150px"/>
-    </a>
+    <div class="page-wrap">
+      <img src="../assets/img/test-logo.png" alt="Metology Logo" class="logo" />
+     
+      <h1 class="title">
+        Metology
+        <br>
+        血糖故事
+      </h1>
+      <div class="line-wrap">
+        <div class="straight-line"></div>
+      </div>
+      <a :href="loginURL">
+        <img src="../assets/img/btn_login_base.png" width="150px"/>
+      </a>
+    </div>
   </section>
 </template>
 
@@ -67,19 +75,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="sass">
+.container
+  height: 100vh
+  display: flex
+  .page-wrap
+    margin: auto
+    margin-top: 30%
+
+.line-wrap
+  display: flex
+  padding-top: 20px
+  padding-bottom: 50px
+  .straight-line
+    height: 2px
+    background-color: black
+    width: 200px
+    margin: auto
+
 .title
-{
   margin: 30px 0;
-}
-.users
-{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.user
-{
-  margin: 10px 0;
-}
+.logo
+  width: 65%
+
 </style>
