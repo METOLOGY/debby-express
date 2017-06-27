@@ -14,4 +14,4 @@ dist
 build
 
 # postgresdb settings
-server/config\.js
+#　server/config\.js
