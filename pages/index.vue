@@ -13,7 +13,7 @@
 <script>
 import axios from '~plugins/axios'
 
-const redirectUri = 'http://localhost:3000'
+const redirectUri = 'http://limitless-shore-51089'
 
 let lineLoginBaseUrl = 'https://access.line.me/dialog/oauth/weblogin?'
 lineLoginBaseUrl += 'response_type=code'
