@@ -1,7 +1,9 @@
 import Nuxt from 'nuxt'
 import express from 'express'
 import bodyParser from 'body-parser'
+import postgraphql from 'postgraphql'
 
+import { dbconfig } from './config.js'
 import api from './api'
 
 const app = express()
@@ -12,6 +14,11 @@ app.set('port', port)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const postConfig = {
+  'graphiql': true
+}
+app.use(postgraphql(dbconfig, postConfig))
 
 // Import API Routes
 app.use('/api', api)

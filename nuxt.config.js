@@ -3,14 +3,16 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'starter',
+    title: 'Debby - 血糖故事',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://code.getmdl.io/1.3.0/material.indigo-pink.min.css' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.13/c3.css' }
     ]
   },
   /*
@@ -20,6 +22,11 @@ module.exports = {
   /*
   ** Add axios globally
   */
+  loading: {
+    color: '#1158a8',
+    height: '5px'
+  },
+  plugins: ['~plugins/mint'],
   build: {
     vendor: ['axios'],
     /*
