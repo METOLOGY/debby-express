@@ -13,7 +13,7 @@
 <script>
 import axios from '~plugins/axios'
 
-const redirectUri = 'https://limitless-shore-51089.herokuapp.com/'
+const redirectUri = 'https://limitless-shore-51089.herokuapp.com/console/'
 // const redirectUri = 'http://localhost:3000/console/'
 
 let lineLoginBaseUrl = 'https://access.line.me/dialog/oauth/weblogin?'
