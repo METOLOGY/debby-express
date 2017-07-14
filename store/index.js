@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -9,7 +10,9 @@ const state = {
   isLogined: '',
   totalData: [],
   DataByDate: {},
-  news: []
+  news: [],
+  bgSet: {},
+  chartData: {}
 }
 
 const mutations = {
@@ -130,6 +133,25 @@ const mutations = {
           FoodRecord: FoodRecord,
           DrugRecord: DrugRecord,
           InsulinRecord: InsulinRecord
+        }
+
+        const bgData = []
+        const labels = []
+        state.totalData.BgRecord.forEach((element) => {
+          const date = new Date(element.time)
+          labels.push(date.getMonth() + '/' + date.getDate())
+          bgData.push(element.glucoseVal)
+        })
+
+        state.chartData = {
+          label: labels,
+          data: bgData
+        }
+
+        state.bgSet = {
+          'max': Math.max(...bgData),
+          'min': Math.min(...bgData),
+          'average': (_.sum(bgData) / bgData.length).toFixed(2)
         }
       })
     }

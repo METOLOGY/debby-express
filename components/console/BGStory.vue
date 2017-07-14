@@ -49,10 +49,6 @@
         </div>
       </mt-swipe-item>
     </mt-swipe>
-
-
-
-
   </div>
 </template>
 
@@ -120,6 +116,7 @@ h5
   overflow: scroll;
   background-color: rgba(0,0,0,0.1)
   padding-bottom: 5px
+  -webkit-overflow-scrolling: touch;
 
 .summary-card
   width: calc(100% - 10px)

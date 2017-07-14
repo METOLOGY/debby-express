@@ -8,6 +8,9 @@
 
   <!--<div class="console-child-layout">-->
   <mt-tab-container v-model="selected" :swipeable="false">
+    <mt-tab-container-item id="summary">
+      <SummaryReport></SummaryReport>
+    </mt-tab-container-item>
     <mt-tab-container-item id="bgstory">
       <BGStory></BGStory>
     </mt-tab-container-item>
@@ -21,27 +24,26 @@
   <!--</div>-->
 
   <mt-tabbar v-model="selected">
+    <mt-tab-item id="summary">
+        <img slot="icon" src="~assets/svg/pie-chart.svg" class="tab-icon">
+        統計圖表
+    </mt-tab-item>
+
 
     <mt-tab-item id="bgstory">
-      <!--<nuxt-link to="/console/bgstory">-->
         <img slot="icon" src="~assets/svg/blood-drop.svg" class="tab-icon">
         血糖故事
-      <!--</nuxt-link>-->
     </mt-tab-item>
     
 
     <mt-tab-item id="articles">
-      <!--<nuxt-link to="/console/news">-->
         <img slot="icon" src="~assets/svg/file.svg" class="tab-icon">
         推薦文章
-      <!--</nuxt-link>-->
     </mt-tab-item>
     
     <mt-tab-item id="shop">
-      <!--<nuxt-link to="/console/shop">-->
         <img slot="icon" src="~assets/svg/cart.svg" class="tab-icon">
         商城選購
-      <!--</nuxt-link>-->
     </mt-tab-item>
     
   </mt-tabbar>
@@ -50,24 +52,25 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Articles from '~components/console/Articles'
 import BGStory from '~components/console/BGStory'
 import Shop from '~components/console/Shop'
+import SummaryReport from '~components/console/SummaryReport'
+
+const redirectUri = 'http://localhost:3000/console/'
 
 export default {
   name: 'console',
-  created () {
-    this.$store.commit('GET_TOTAL_DATA')
-  },
   components: {
     BGStory,
     Articles,
-    Shop
+    Shop,
+    SummaryReport
   },
   data () {
     return {
-      selected: '',
-      active: ''
+      selected: 'bgstory'
     }
   },
   computed: {
@@ -75,6 +78,32 @@ export default {
       if (process.BROWSER_BUILD) {
         return window.localStorage.getItem('pictureUrl')
       }
+    }
+  },
+  created () {
+    const vm = this
+    if (this.$route.query.code) {
+      const request = {
+        client_id: '1505688700',
+        client_secret: '93e503e803bf6889cf1ba3c564e81fa0',
+        code: vm.$route.query.code,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      }
+
+      axios.post('/api/line-token', request)
+      .then((res) => {
+        const data = res.data
+        const keys = Object.keys(data)
+
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          localStorage.setItem(key, data[key])
+        }
+
+        this.$store.commit('GET_TOTAL_DATA')
+        // vm.$router.push('/console')
+      })
     }
   }
 }

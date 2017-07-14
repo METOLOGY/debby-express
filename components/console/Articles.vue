@@ -52,6 +52,7 @@ export default {
   overflow: scroll;
   background-color: rgba(0,0,0,0.1)
   padding-bottom: 5px
+  -webkit-overflow-scrolling: touch;
 
 .card-wrap
   height: calc(100%)
