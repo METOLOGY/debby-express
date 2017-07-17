@@ -2,9 +2,7 @@
   <div class="flow-layout">
     <mt-swipe :show-indicators="false" :auto="0">
       <mt-swipe-item v-for="(dayData, datetime) in alldata">
-        <div class="datetime-bar">
-          {{ datetime | readableDate }}
-        </div>
+        
 
         <div class="card-wrap">
           <div class="mdl-card" v-for="item in dayData">
@@ -47,6 +45,11 @@
 
           </div>
         </div>
+
+        <div class="datetime-bar">
+          {{ datetime | readableDate }}
+        </div>
+
       </mt-swipe-item>
     </mt-swipe>
   </div>
@@ -188,6 +191,9 @@ h5
 .mint-tabbar
   z-index: 2
   
+.mint-indicator-wrapper
+  z-index: 100
+
 .empty
   position: relative
   height: calc(100% - 200px);
