@@ -21,6 +21,7 @@
     "fastclick": "^1.0.6",
     "lodash": "^4.17.4",
     "mint-ui": "^2.2.7",
+    "moment": "^2.18.1",
     "nuxt": "~1.0.0-alpha1",
     "source-map-support": "^0.4.15"
   },
