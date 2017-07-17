@@ -2,12 +2,12 @@
   <div class='summary-layout'>
 
     <div class="table-wrap">
-      <div class="mdl-data-table mdl-shadow--2dp">
+      <div class="summary-table">
         <thead>
           <tr>
-            <th>最高血糖</th>
-            <th>最低血糖</th>
-            <th>平均血糖</th>
+            <th>本週最高血糖</th>
+            <th>本週最低血糖</th>
+            <th>本週平均血糖</th>
           </tr>
         </thead>
         <tbody>
@@ -49,10 +49,10 @@ export default {
           datasets: [{
             data: chartData.data,
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)'
+              'rgba(17, 88, 168, 0.2)'
             ],
             borderColor: [
-              'rgba(255,99,132,1)'
+              'rgba(17, 88, 168, 1)'
             ],
             borderWidth: 1
           }]
@@ -62,11 +62,6 @@ export default {
             display: false
           },
           scales: {
-            // xAxes: [{
-            //   time: {
-            //     unit: 'day'
-            //   }
-            // }],
             yAxes: [{
               ticks: {
                 beginAtZero: true
@@ -111,4 +106,15 @@ export default {
 .mdl-data-table
   display: table
   width: 100%
+
+.summary-table
+  display: table
+  border: 1px solid rgba(0,0,0,0.3)
+  width: 100%
+  th
+    border-bottom: 1px solid rgba(0,0,0,0.3)
+  th, td
+    padding: 0.5rem
+    text-align: center
+
 </style>

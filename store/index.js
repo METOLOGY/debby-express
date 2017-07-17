@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import _ from 'lodash'
+import moment from 'moment'
 
 Vue.use(Vuex)
 
@@ -99,10 +100,11 @@ const mutations = {
         allData.forEach((val) => {
           const time = new Date(val.time) // transfer to datetime type
           time.setHours(0, 0, 0, 0) // set time to 0, keep date only
-          if (!(time in allDataByDate)) {
-            allDataByDate[time] = []
+          const date = time.getFullYear() + '-' + time.getMonth() + '-' + time.getDate()
+          if (!(date in allDataByDate)) {
+            allDataByDate[date] = []
           }
-          allDataByDate[time].push(val)
+          allDataByDate[date].push(val)
         })
 
         // stack other records to the food record. (before or after two hour.)
@@ -137,10 +139,16 @@ const mutations = {
 
         const bgData = []
         const labels = []
+        // get the data of this week
+
+        const now = moment()
+        const last7days = moment().subtract(7, 'day')
         state.totalData.BgRecord.forEach((element) => {
-          const date = new Date(element.time)
-          labels.push(date.getMonth() + '/' + date.getDate())
-          bgData.push(element.glucoseVal)
+          const date = moment(element.time)
+          if (date.isBetween(last7days, now)) {
+            labels.push(date.month() + '/' + date.date())
+            bgData.push(element.glucoseVal)
+          }
         })
 
         state.chartData = {
