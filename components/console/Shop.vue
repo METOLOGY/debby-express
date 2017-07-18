@@ -1,10 +1,11 @@
 <template>
   <div class="shop-layout">
-    <div class="building-wrap">
+    <!-- <div class="building-wrap">
       <img src="~assets/svg/girl.svg" alt="">
       <h5>還在施工中...</h5>
       <h5>敬請期待！</h5>
-    </div>
+    </div> -->
+    <iframe src="https://jasonli5467684.shoplineapp.com/" frameborder="0"></iframe>
     
   </div>
 </template>
