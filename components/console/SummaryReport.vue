@@ -2,12 +2,13 @@
   <div class='summary-layout'>
 
     <div class="table-wrap">
+      <h3 class="mdl-typography--text-center">過去七天統計</h3>
       <div class="summary-table">
         <thead>
           <tr>
-            <th>本週最高血糖</th>
-            <th>本週最低血糖</th>
-            <th>本週平均血糖</th>
+            <th>最高血糖</th>
+            <th>最低血糖</th>
+            <th>平均血糖</th>
           </tr>
         </thead>
         <tbody>
@@ -20,7 +21,6 @@
       </div>
     </div>
     <div class="canvas-wrap">
-      <h5 class="mdl-typography--text-center">血糖趨勢</h5>
       <canvas id='summary-chart' height="200px"></canvas>
     </div>
   </div>
@@ -97,7 +97,10 @@ export default {
 
 <style lang="sass">
 .table-wrap
-  padding: 0.5rem
+  padding: 0.5rem 0 
+  h5
+    padding: 0.5rem
+  
 
 .canvas-wrap
   padding: 0.5rem
@@ -110,11 +113,16 @@ export default {
 .summary-table
   display: table
   border: 1px solid rgba(0,0,0,0.3)
+  border-right: 0;
+  border-left: 0;
   width: 100%
   th
     border-bottom: 1px solid rgba(0,0,0,0.3)
+    background-color: rgb(237,111,5);
+    color: white;
+    font-weight: 100;
   th, td
-    padding: 0.5rem
+    padding: 1rem
     text-align: center
 
 </style>
