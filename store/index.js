@@ -102,7 +102,7 @@ const mutations = {
           const time = moment(val.time) // transfer to datetime type
           time.startOf('day') // set time to 0, keep date only
           console.log(time)
-          const date = time.years() + '-' + (time.months() + 1)  + '-' + time.date()
+          const date = time.years() + '-' + (time.months() + 1) + '-' + time.date()
           if (!(date in allDataByDate)) {
             allDataByDate[date] = []
           }
