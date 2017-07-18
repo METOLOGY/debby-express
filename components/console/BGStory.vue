@@ -67,8 +67,7 @@ export default {
   computed: {
     alldata () {
       return this.$store.state.DataByDate
-    },
-
+    }
   },
   filters: {
     readableTime (val) {
