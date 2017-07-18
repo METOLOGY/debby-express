@@ -27,7 +27,7 @@ export default {
       question: '糖尿病'
     }
   },
-  created () {
+  mounted () {
     this.$store.commit('GET_RELATED_NEWS', this.question)
   },
   watch: {

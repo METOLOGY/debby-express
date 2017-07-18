@@ -23,8 +23,8 @@
                 </div>
             </div>
 
-            <div class="mdl-card__supporting-text food-supporting-text" v-else>
-              <div v-if="item.note"><h5>{{ item.note }}</h5></div>
+            <div class="mdl-card__supporting-text food-supporting-text" v-if="item.note">
+              <div><h5>{{ item.note }}</h5></div>
             </div>
 
 
@@ -88,7 +88,7 @@ export default {
 // mdl format
 .mdl-card__actions
   text-align: center
-  background-color: #65bdbc
+  background-color: rgb(95,193,199)
   color: white
 
 .mdl-card
@@ -108,6 +108,8 @@ h1
   margin: 0px
   text-align: center
   line-height: 1.0
+  @media screen and (max-width: 400px)
+    font-size: 110px
 
 h5
   margin: 0px
@@ -168,11 +170,12 @@ h5
   font-size: 0.3em
 
 .datetime-bar
-  background: white;
+  background: rgb(237, 111, 5);
   padding: 10px;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1;
   text-align: center;
+  color: white;
 
 .card-wrap
   height: calc(100% - 44px)
