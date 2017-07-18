@@ -1,7 +1,7 @@
 <template>
   <div class="flow-layout">
     <mt-swipe :show-indicators="false" :auto="0">
-      <mt-swipe-item v-for="(dayData, datetime) in alldata">
+      <mt-swipe-item v-for="(dayData, datetime) in alldata" v-bind:dayData="dayData">
         
 
         <div class="card-wrap">
@@ -57,6 +57,8 @@
 
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'BGStory',
   created () {
@@ -65,17 +67,18 @@ export default {
   computed: {
     alldata () {
       return this.$store.state.DataByDate
-    }
+    },
+
   },
   filters: {
     readableTime (val) {
-      const datetime = new Date(val)
-      const time = datetime.getHours() + ':' + datetime.getMinutes()
+      const datetime = moment(val)
+      const time = datetime.hour() + ':' + datetime.minutes()
       return time
     },
     readableDate (val) {
-      const datetime = new Date(val)
-      const date = datetime.getFullYear() + ' - ' + datetime.getMonth() + ' - ' + datetime.getDate()
+      const datetime = moment(val)
+      const date = datetime.year() + ' - ' + datetime.month() + ' - ' + datetime.date()
       return date
     }
   }
