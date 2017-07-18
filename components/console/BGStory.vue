@@ -47,7 +47,7 @@
         </div>
 
         <div class="datetime-bar">
-          {{ datetime | readableDate }}
+          {{ datetime }}
         </div>
 
       </mt-swipe-item>
@@ -74,11 +74,6 @@ export default {
       const datetime = moment(val)
       const time = datetime.hour() + ':' + datetime.minutes()
       return time
-    },
-    readableDate (val) {
-      const datetime = moment(val)
-      const date = datetime.year() + ' - ' + datetime.month() + ' - ' + datetime.date()
-      return date
     }
   }
 }
