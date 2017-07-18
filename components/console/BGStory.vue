@@ -1,7 +1,7 @@
 <template>
   <div class="flow-layout">
     <mt-swipe :show-indicators="false" :auto="0">
-      <mt-swipe-item v-for="(dayData, datetime) in alldata" v-bind:dayData="dayData">
+      <mt-swipe-item v-for="(dayData, datetime) in alldata" v-bind:dayData="dayData" v-bind:datetime="datetime">
         
 
         <div class="card-wrap">
