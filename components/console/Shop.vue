@@ -24,6 +24,8 @@ h5
 .shop-layout
   height: calc(100vh - 55px - 40px)
   display: flex
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
   .building-wrap
     margin: auto 
     text-align: center
