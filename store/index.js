@@ -13,7 +13,8 @@ const state = {
   DataByDate: {},
   news: [],
   bgSet: {},
-  chartData: {}
+  chartData: {},
+  allDataByDate: {}
 }
 
 const mutations = {
@@ -98,9 +99,9 @@ const mutations = {
         })
 
         allData.forEach((val) => {
-          const time = new Date(val.time) // transfer to datetime type
-          time.setHours(0, 0, 0, 0) // set time to 0, keep date only
-          const date = time.getFullYear() + '-' + time.getMonth() + '-' + time.getDate()
+          const time = moment(val.time) // transfer to datetime type
+          time.startOf('day') // set time to 0, keep date only
+          const date = time.year() + '-' + time.month() + '-' + time.date()
           if (!(date in allDataByDate)) {
             allDataByDate[date] = []
           }
@@ -112,14 +113,14 @@ const mutations = {
           const dataByDate = allDataByDate[key]
           dataByDate.forEach((record) => {
             if (record.dataType === 'food') {
-              const recordTime = new Date(record.time)
-              const before2hour = recordTime.setHours(recordTime.getHours() - 2)
-              const after2hour = recordTime.setHours(recordTime.getHours() + 2)
+              const recordTime = moment(record.time)
+              const before2hour = recordTime.subtract(2, 'hour')
+              const after2hour = recordTime.add(2, 'hour')
 
               for (let i = 0; i < dataByDate.length; i++) {
                 const otherRecord = dataByDate[i]
-                const otherRecordTime = new Date(dataByDate[i].time)
-                if (otherRecord.dataType === 'bg' && otherRecordTime.getTime() < after2hour && otherRecordTime.getTime() > before2hour) {
+                const otherRecordTime = moment(dataByDate[i].time)
+                if (otherRecord.dataType === 'bg' && otherRecordTime.isBetween(before2hour, after2hour)) {
                   if (!('similar_record' in record)) record['similar_record'] = []
                   record['similar_record'].push(otherRecord) // append the record to the food record.
                   dataByDate.splice(i, 1) // remove the records.
