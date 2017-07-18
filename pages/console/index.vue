@@ -1,6 +1,6 @@
 <template>
 <div>
-  <mt-header fixed title="血糖故事">
+  <mt-header fixed title="Debby - 血糖故事">
     <img :src="`${profile}/small`" alt="" slot="right" height="30px">
   </mt-header>
 
