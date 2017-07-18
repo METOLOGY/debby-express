@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="console-layout">
   <mt-header fixed title="Debby - 血糖故事">
     <img :src="`${profile}/small`" alt="" slot="right" height="30px">
   </mt-header>
@@ -104,4 +104,8 @@ export default {
 .tab-icon
   width: 24px
   height: 24px
+
+.console-layout
+  height: 100vh
+  position: relative
 </style>
