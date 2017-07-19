@@ -12,8 +12,8 @@ const state = {
   totalData: [],
   DataByDate: {},
   news: [],
-  bgSet: {},
-  chartData: {},
+  bgSet7day: {},
+  bgSet30day: {},
   allDataByDate: {}
 }
 
@@ -101,8 +101,7 @@ const mutations = {
         allData.forEach((val) => {
           const time = moment(val.time) // transfer to datetime type
           time.startOf('day') // set time to 0, keep date only
-          console.log(time)
-          const date = time.years() + '-' + (time.months() + 1) + '-' + time.date()
+          const date = time.year() + '-' + (time.month() + 1) + '-' + time.date()
           if (!(date in allDataByDate)) {
             allDataByDate[date] = []
           }
@@ -153,15 +152,35 @@ const mutations = {
           }
         })
 
-        state.chartData = {
-          label: labels,
-          data: bgData
-        }
+        const bgData30 = []
+        const labels30 = []
+        const last30days = moment().subtract(30, 'day')
+        state.totalData.BgRecord.forEach((element) => {
+          const date = moment(element.time)
+          if (date.isBetween(last30days, now)) {
+            labels30.push(date.month() + '/' + date.date())
+            bgData30.push(element.glucoseVal)
+          }
+        })
 
-        state.bgSet = {
+        state.bgSet7day = {
           'max': Math.max(...bgData),
           'min': Math.min(...bgData),
-          'average': (_.sum(bgData) / bgData.length).toFixed(2)
+          'average': (_.sum(bgData) / bgData.length).toFixed(2),
+          'chartData': {
+            label: labels,
+            data: bgData
+          }
+        }
+
+        state.bgSet30day = {
+          'max': Math.max(...bgData30),
+          'min': Math.min(...bgData30),
+          'average': (_.sum(bgData30) / bgData30.length).toFixed(2),
+          'chartData': {
+            label: labels30,
+            data: bgData30
+          }
         }
       })
     }

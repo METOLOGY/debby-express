@@ -27,7 +27,7 @@
               <div><h5>{{ item.note }}</h5></div>
             </div>
 
-
+            <!-- no data: when user login first time.  -->
             <div v-if="alldata.length === 0" class="empty">
               <img src="~assets/svg/debby-no-record.svg" id="debby">
             </div>
@@ -39,7 +39,9 @@
             <div class="mdl-card__menu">
               <div class="media">
                 <img src="~assets/svg/blood-drop.svg" v-if="item.dataType === 'bg'" class="media-icon">
-                <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">
+                <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon"> 
+                <img src="~assets/svg/pill-capsule.svg" v-if="item.dataType === 'drug'" class="media-icon"> 
+                <!-- <img src="~assets/svg/salad.svg" v-if="item.dataType === 'food'" class="media-icon">  -->
               </div>
             </div>
 

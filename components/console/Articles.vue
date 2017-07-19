@@ -37,7 +37,6 @@ export default {
   },
   computed: {
     articles () {
-      console.log(this.news)
       return this.$store.state.news.data
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class='summary-layout'>
 
-    <div class="table-wrap">
+    <div class="table-wrap summary-chart-seven-days">
       <h3 class="mdl-typography--text-center">過去七天統計</h3>
       <div class="summary-table">
         <thead>
@@ -13,15 +13,39 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ bgSet.max }}</td>
-            <td>{{ bgSet.min }}</td>
-            <td>{{ bgSet.average }}</td>
+            <td>{{ bgSet7day.max }}</td>
+            <td>{{ bgSet7day.min }}</td>
+            <td>{{ bgSet7day.average }}</td>
           </tr>
         </tbody>
       </div>
+      <div class="canvas-wrap">
+        <canvas id="summary-chart-seven-days" height="200px"></canvas>
+      </div>
     </div>
-    <div class="canvas-wrap">
-      <canvas id='summary-chart' height="200px"></canvas>
+    
+
+    <div class="table-wrap summary-chart-thirty-days">
+      <h3 class="mdl-typography--text-center">過去三十天統計</h3>
+      <div class="summary-table">
+        <thead>
+          <tr>
+            <th>最高血糖</th>
+            <th>最低血糖</th>
+            <th>平均血糖</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ bgSet30day.max }}</td>
+            <td>{{ bgSet30day.min }}</td>
+            <td>{{ bgSet30day.average }}</td>
+          </tr>
+        </tbody>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="summary-chart-thirty-days" height="200px"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -40,8 +64,9 @@ export default {
     // this.$store.commit('GET_TOTAL_DATA')
   },
   methods: {
-    plot (chartData) {
-      const ctx = document.getElementById('summary-chart')
+    plot (chartData, divID) {
+      const ctx = document.getElementById(divID)
+      console.log(ctx)
       const mychart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -79,15 +104,19 @@ export default {
   },
   beforeUpdate () {
     console.log('beforeupdate')
-    this.plot(this.chartData)
+    this.plot(this.bgSet7day.chartData, 'summary-chart-seven-days')
+    this.plot(this.bgSet30day.chartData, 'summary-chart-thirty-days')
     // this.chartElement.update()
   },
   computed: {
     chartData () {
       return this.$store.state.chartData
     },
-    bgSet () {
-      return this.$store.state.bgSet
+    bgSet7day () {
+      return this.$store.state.bgSet7day
+    },
+    bgSet30day () {
+      return this.$store.state.bgSet30day
     }
   }
 }
@@ -100,7 +129,14 @@ export default {
   padding: 0.5rem 0 
   h5
     padding: 0.5rem
-  
+
+.summary-layout
+  z-index: 0;
+  height: calc(100vh - 55px - 40px);
+  overflow: scroll;
+  background-color: white
+  padding-bottom: 5px
+  -webkit-overflow-scrolling: touch;
 
 .canvas-wrap
   padding: 0.5rem
