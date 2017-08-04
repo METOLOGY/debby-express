@@ -1,1 +1,0 @@
-export const dbconfig = 'postgres://hsnl:totoro705@debby.metology.com.tw:5566/hsnl'
